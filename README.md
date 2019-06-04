@@ -1,8 +1,6 @@
 [![Build Status](https://travis-ci.org/roufa85/kafka-operator.svg?branch=master)](https://travis-ci.org/roufa85/kafka-operator)
 [![Code Coverage](https://codecov.io/github/roufa85/kafka-operator/coverage.svg)](https://codecov.io/gh/roufa85/kafka-operator)
 
-https://travis-ci.org/roufa85/kafka-operator.svg?branch=master
-
 # kafka operator
 
 Kafka operator is a process that automatically manages creation and deletion of kafka topics, their number of partitions, replicas as well as properties.  
