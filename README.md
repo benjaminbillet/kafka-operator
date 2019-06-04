@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/roufa85/kafka-operator.svg?branch=master)](https://travis-ci.org/roufa85/kafka-operator)
 [![Code Coverage](https://codecov.io/github/roufa85/kafka-operator/coverage.svg)](https://codecov.io/gh/roufa85/kafka-operator)
-[![Code Coverage](https://codecov.io/gh/roufa85/kafka-operator/branch/master/graph/badge.svg)](https://codecov.io/gh/roufa85/kafka-operator)
 
 # kafka operator
 
