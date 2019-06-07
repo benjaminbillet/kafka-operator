@@ -24,25 +24,28 @@ import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.common.Node;
 import org.apache.kafka.common.TopicPartitionInfo;
 import org.apache.kafka.common.errors.TopicExistsException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import com.salesforce.kafka.test.junit5.SharedKafkaTestResource;
 import nb.kafka.operator.util.WhiteboxUtil;
 import nb.kafka.operator.watch.AbstractTopicWatcher;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 public class KafkaOperatorTest {
-  private KafkaOperator operator;
-  private AppConfig config = KafkaOperator.loadConfig();
+  @RegisterExtension
+  public static final SharedKafkaTestResource  kafkaBroker = new SharedKafkaTestResource ().withBrokers(1);
 
-  @BeforeEach
-  void setUp() {
-    config.setKafkaUrl("localhost:9092");
+  private static KafkaOperator operator;
+  private static AppConfig config = KafkaOperator.loadConfig();
+
+  @BeforeAll
+  static void setUp() {
+    config.setKafkaUrl(kafkaBroker.getKafkaConnectString());
     operator = new KafkaOperator(config);
   }
 
-  @AfterEach
-  void tearDown() {
+  @AfterAll
+  static void tearDown() {
     operator = null;
     metrics().remove("managed-topics");
   }
