@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml --provider=openshift
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grafana-server
+  name: grafana-server
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: grafana-server
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grafana-server
+    spec:
+      containers:
+      - image: ' '
+        name: grafana-server
+        ports:
+        - containerPort: 3000
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - grafana-server
+      from:
+        kind: ImageStreamTag
+        name: grafana-server:latest
+    type: ImageChange
+status: {}
