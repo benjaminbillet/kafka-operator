@@ -1,0 +1,523 @@
+{
+    "__inputs": [
+      {
+        "name": "DS_PROMETHEUS",
+        "label": "prometheurs",
+        "description": "",
+        "type": "datasource",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus"
+      }
+    ],
+    
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 26,
+      "iteration": 1561650070217,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 20,
+          "panels": [],
+          "repeat": "pod",
+          "scopedVars": {
+            "pod": {
+              "selected": true,
+              "text": "kafka-topic-operator-1-ghchh",
+              "value": "kafka-topic-operator-1-ghchh"
+            }
+          },
+          "title": "$pod",
+          "type": "row"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": "${DS_PROMETHEURS}",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 1
+          },
+          "id": 1,
+          "links": [],
+          "options": {
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "max": 4,
+                "min": 0,
+                "unit": "short"
+              },
+              "mappings": [
+                {
+                  "from": "",
+                  "id": 1,
+                  "operator": "",
+                  "text": "Created",
+                  "to": "",
+                  "type": 1,
+                  "value": "0"
+                },
+                {
+                  "from": "",
+                  "id": 2,
+                  "operator": "",
+                  "text": "RUNNING",
+                  "to": "",
+                  "type": 1,
+                  "value": "1"
+                },
+                {
+                  "from": "",
+                  "id": 3,
+                  "operator": "",
+                  "text": "STOPPED",
+                  "to": "",
+                  "type": 1,
+                  "value": "2"
+                },
+                {
+                  "from": "",
+                  "id": 4,
+                  "operator": "",
+                  "text": "FAILED",
+                  "to": "",
+                  "type": 1,
+                  "value": "3"
+                },
+                {
+                  "from": "",
+                  "id": 5,
+                  "operator": "",
+                  "text": "DONE",
+                  "to": "",
+                  "type": 1,
+                  "value": "4"
+                }
+              ],
+              "override": {},
+              "thresholds": [
+                {
+                  "color": "blue",
+                  "index": 0,
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "color": "#EAB839",
+                  "index": 2,
+                  "value": 2
+                },
+                {
+                  "color": "semi-dark-red",
+                  "index": 3,
+                  "value": 3
+                },
+                {
+                  "color": "#6ED0E0",
+                  "index": 4,
+                  "value": 4
+                }
+              ],
+              "values": false
+            },
+            "orientation": "auto",
+            "showThresholdLabels": true,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "6.2.4",
+          "repeat": "namespace",
+          "repeatDirection": "v",
+          "scopedVars": {
+            "namespace": {
+              "selected": true,
+              "text": "monitoring",
+              "value": "monitoring"
+            },
+            "pod": {
+              "selected": true,
+              "text": "kafka-topic-operator-1-ghchh",
+              "value": "kafka-topic-operator-1-ghchh"
+            }
+          },
+          "targets": [
+            {
+              "expr": "operator_state",
+              "format": "time_series",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "",
+              "refId": "A",
+              "step": 600
+            }
+          ],
+          "thresholds": "",
+          "title": "operator state",
+          "type": "gauge"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "${DS_PROMETHEURS}",
+          "gridPos": {
+            "h": 7,
+            "w": 5,
+            "x": 8,
+            "y": 1
+          },
+          "id": 15,
+          "links": [],
+          "options": {
+            "fieldOptions": {
+              "calcs": [
+                "last"
+              ],
+              "defaults": {
+                "max": 100,
+                "min": 0,
+                "unit": "none"
+              },
+              "mappings": [],
+              "override": {},
+              "thresholds": [
+                {
+                  "color": "green",
+                  "index": 0,
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "index": 1,
+                  "value": 80
+                }
+              ],
+              "values": false
+            },
+            "orientation": "auto",
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "6.2.4",
+          "repeatIteration": 1472313287633,
+          "scopedVars": {
+            "pod": {
+              "selected": true,
+              "text": "kafka-topic-operator-1-ghchh",
+              "value": "kafka-topic-operator-1-ghchh"
+            }
+          },
+          "targets": [
+            {
+              "expr": "managed_topics",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Number Of Topics Managed",
+          "type": "gauge"
+        },
+        {
+          "columns": [],
+          "datasource": "${DS_PROMETHEURS}",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 21,
+            "w": 13,
+            "x": 0,
+            "y": 8
+          },
+          "id": 19,
+          "links": [],
+          "options": {},
+          "pageSize": null,
+          "repeatIteration": 1472313287633,
+          "scopedVars": {
+            "pod": {
+              "selected": true,
+              "text": "kafka-topic-operator-1-ghchh",
+              "value": "kafka-topic-operator-1-ghchh"
+            }
+          },
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 10,
+            "desc": false
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "mappingType": 1,
+              "pattern": "__name__",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "deploymentconfig",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "instance",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "job",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "kubernetes_pod_name",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "kubernetes_namespace",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": "cell",
+              "colors": [
+                "rgba(50, 172, 45, 0.97)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(245, 54, 54, 0.9)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": null,
+              "mappingType": 1,
+              "pattern": "Value",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "managed_topic  ",
+              "format": "table",
+              "instant": true,
+              "intervalFactor": 1,
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Topic Managed status",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 18,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allFormat": "glob",
+            "allValue": null,
+            "current": {
+              "selected": true,
+              "text": "monitoring",
+              "value": "monitoring"
+            },
+            "datasource": "${DS_PROMETHEURS}",
+            "definition": "",
+            "hide": 0,
+            "includeAll": false,
+            "label": null,
+            "multi": false,
+            "multiFormat": "glob",
+            "name": "namespace",
+            "options": [],
+            "query": "label_values(kubernetes_namespace)",
+            "refresh": 1,
+            "refresh_on_load": true,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allFormat": "glob",
+            "allValue": null,
+            "current": {
+              "selected": false,
+              "text": "kafka-topic-operator-1-ghchh",
+              "value": "kafka-topic-operator-1-ghchh"
+            },
+            "datasource": "${DS_PROMETHEURS}",
+            "definition": "",
+            "hide": 0,
+            "includeAll": true,
+            "label": null,
+            "multi": false,
+            "multiFormat": "glob",
+            "name": "pod",
+            "options": [],
+            "query": "label_values(kubernetes_pod_name)",
+            "refresh": 1,
+            "refresh_on_load": true,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "now": true,
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ],
+        "time_options": [
+          "5m",
+          "15m",
+          "1h",
+          "6h",
+          "12h",
+          "24h",
+          "2d",
+          "7d",
+          "30d"
+        ]
+      },
+      "timezone": "browser",
+      "title": "kafka-topic-operator",
+      "uid": "p5hInT4Zr",
+      "version": 3
+    }
