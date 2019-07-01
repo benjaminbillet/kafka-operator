@@ -1,24 +1,29 @@
-id: kafka-operator
+id: kafka-topic-operator
 kind: Template
 apiVersion: v1
-name: kafka-operator
+name: kafka-topic-operator
 metadata:
-  name: kafka-operator
+  name: kafka-topic-operator
   label:
-    app: kafka-operator
+    app: kafka-topic-operator
     approle: operator
     category: messaging
   annotations:
-    description: Creates a Kafka operator.
+    description: Create Kafka operator
     tags: kafka,messaging
-    openshift.io/display-name: Kafka operator
+    openshift.io/display-name: Kafka Topic Operator
     iconClass: fa pficon-topology
 parameters:
-- description: Zookeeper cluster address
-  displayName: Zookeeper URL
-  name: ZOOKEEPER_BOOTSTRAP
-  value: "zookeeper:2181"
+- description: Kafka Bootstrap Servers address
+  displayName: Kafka Bootstrap Server
+  name: BOOTSTRAP_SERVERS
+  value: 'kafka:9092'
   required: true
+- description: Default replication factor for kafka topics
+  displayName: Default replication factor
+  name: DEFAULT_REPLICATION_FACTOR
+  value: '1'
+  required: false
 - description: Set to 'true' to enable deletion of kafka topics managed by operator. 
   displayName: Enable topic delete
   name: ENABLE_TOPIC_DELETE
@@ -26,51 +31,91 @@ parameters:
   required: false
 - description: Set to 'true' to import and start managing existing topics 
   displayName: Import existing topics
-  name: IMPORT_TOPICS
+  name: ENABLE_TOPIC_IMPORT
   value: 'false'
   required: false
-- description: Default replication factor for kafka topics
-  displayName: Default replication factor
-  name: DEFAULT_REPL_FACTOR
-  value: '2'
+- description: If set to true activates acl managment
+  displayName: Enable ACL  
+  name: ENABLE_ACL
+  value: 'false'
   required: false
-- description: Interval in seconds between updates to kafka-topics
-  displayName: Operator update interval  
-  name: REFRESH_INTERVAL
-  value: '60'
+- description: Set log level (debug|info|warn|error)
+  displayName: Operator log level 
+  name: LOG_LEVEL
+  value: 'debug'
   required: false
-- description: The password used for the Jolokia endpoint authentication
-  displayName: Jolokia password  
-  name: JOLOKIA_PASSWORD
-  generate: expression
-  from: '[a-zA-Z0-9]{15}'
-  required: true
+- description: Set JVM resources
+  displayName: JAVA Options 
+  name: JAVA_OPTIONS
+  value: '-Xmx256M'
+  required: false
+- description: Unique id of the operator in a namespace
+  displayName: Operator ID 
+  name: OPERATOR_ID
+  value: 'kafka-topic-operator'
+  required: false
+- description: Set Kafka timeout
+  displayName: Kafka timeout (ms) 
+  name: KAFKA_TIMEOUT_MS
+  value: '30000'
+  required: false
+- description: HTTP port to expose metrics
+  displayName: Metrics port
+  name: METRICS_PORT
+  value: '9889'
+  required: false
+- description: METRICS JVM
+  displayName: METRICS_JVM
+  name: METRICS_JVM
+  value: '9779'
+  required: false
+- description: HTTP port for health check endpoints
+  displayName: Healths port
+  name: HEALTHS_PORT
+  value: '9559'
+- description: The maximum allowed value of replication factor
+  displayName: Max Replication Factor
+  name: MAX_REPLICATION_FACTOR
+  value: '3'
+  required: false
+- description: The maximum allowed value of topic partitions
+  displayName: Max topic partitions
+  name: MAX_PARTITIONS
+  value: '2000'
+  required: false
+- description: The maximum allowed value of topic retention in Ms
+  displayName: Max topic retention (ms) 
+  name: MAX_RETENTION_MS
+  value: '604800000'
+  required: false
+
+
 objects:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: kafka-operator
+    name: kafka-topic-operator
     label:
-      app: kafka-operator
+      app: kafka-topic-operator
       approle: operator
 - apiVersion: v1
   kind: RoleBinding
   metadata:
-    name: kafka-operator
+    name: kafka-topic-operator
     label:
-      app: kafka-operator
+      app: kafka-topic-operator
       approle: operator
   roleRef:
     name: edit
   subjects:
   - kind: ServiceAccount
-    name: kafka-operator
+    name: kafka-topic-operator
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: kafka-operator
+    name: kafka-topic-operator
     label:
-      app: kafka-operator
+      app: kafka-topic-operator
       approle: operator
   spec:
     dockerImageRepository: nbogojevic/kafka-operator
@@ -86,9 +131,9 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: kafka-operator
+    name: kafka-topic-operator
     label:
-      app: kafka-operator
+      app: kafka-topic-operator
       approle: operator
   spec:
     triggers:
@@ -96,83 +141,84 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - kafka-operator
+            - kafka-topic-operator
           from:
             kind: ImageStreamTag
-            name: kafka-operator:latest
+            name: nbogojevic/kafka-operator:latest
       - type: ConfigChange
     replicas: 1
     selector:
-      deploymentconfig: kafka-operator
+      deploymentconfig: kafka-topic-operator
     template:
       metadata:
         labels:
-          app: kafka-operator
-          deploymentconfig: kafka-operator
+          app: kafka-topic-operator
+          deploymentconfig: kafka-topic-operator
       spec:
         containers:
-          - name: kafka-operator
+          - name: kafka-topic-operator
             image: nbogojevic/kafka-operator
             ports:
-              - name: jolokia
-                containerPort: 8778
+              - name: prometheus
+                containerPort: 9889
+                protocol: TCP
+              - containerPort: 9779
+                name: METRICS_JVM
+                protocol: TCP
+              - containerPort: 9559
+                name: healthz
                 protocol: TCP
             env:
-              - name: ZOOKEEPER_BOOTSTRAP
-                value: "${ZOOKEEPER_BOOTSTRAP}"
+              - name: BOOTSTRAP_SERVERS
+                value: "${BOOTSTRAP_SERVERS}"
+              - name: DEFAULT_REPLICATION_FACTOR
+                value: ${DEFAULT_REPLICATION_FACTOR}
               - name: ENABLE_TOPIC_DELETE
-                value: "${ENABLE_TOPIC_DELETE}"
-              - name: DEFAULT_REPL_FACTOR
-                value: "${DEFAULT_REPL_FACTOR}"
-              - name: REFRESH_INTERVAL
-                value: "${REFRESH_INTERVAL}"
-              - name: AB_JOLOKIA_PASSWORD
-                value: "${JOLOKIA_PASSWORD}"
-              - name: IMPORT_TOPICS
-                value: "${IMPORT_TOPICS}"
-              - name: AB_JOLOKIA_PASSWORD_RANDOM
-                value: "false"
-            resources: {}
+                value: ${ENABLE_TOPIC_DELETE}
+              - name: ENABLE_TOPIC_IMPORT
+                value: ${ENABLE_TOPIC_IMPORT}
+              - name: ENABLE_ACL
+                value: ${ENABLE_ACL}
+              - name: LOG_LEVEL
+                value: "${LOG_LEVEL}"
+              - name: JAVA_OPTIONS
+                value: "${JAVA_OPTIONS}"
+              - name: OPERATOR_ID
+                value: "${OPERATOR_ID}" 
+              - name: KAFKA_TIMEOUT_MS
+                value: ${KAFKA_TIMEOUT_MS}
+              - name: METRICS_PORT
+                value: ${METRICS_PORT}
+              - name: METRICS_JVM
+                value: ${METRICS_JVM}
+              - name: MAX_REPLICATION_FACTOR
+                value: ${MAX_REPLICATION_FACTOR}
+              - name: MAX_PARTITIONS
+                value: ${MAX_PARTITIONS}
+              - name: MAX_RETENTION_MS
+                value: ${MAX_RETENTION_MS}
+                readinessProbe:
+                  httpGet:
+                    path: /ready
+                    port: healthz
+                  initialDelaySeconds: 15
+                  timeoutSeconds: 1
+                  livenessProbe:
+                    httpGet:
+                      path: /healthy
+                      port: healthz
+                    initialDelaySeconds: 15
+                    timeoutSeconds: 1
+                  resources:
+                    limits:
+                      memory: 300Mi
+                    requests:
+                      memory: 150Mi
             terminationMessagePath: /dev/termination-log
             imagePullPolicy: Always
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
+        serviceAccountName: kafka-topic-operator
+        serviceAccount: kafka-topic-operator
         dnsPolicy: ClusterFirst
-        serviceAccountName: kafka-operator
-        serviceAccount: kafka-operator
-        securityContext: {}
-        volumes:
-        - name: hawkular-openshift-agent
-          configMap:
-            name: kafka-operator-metrics
-- apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    name: kafka-operator-metrics
-    labels:
-      app: kafka-operator
-      approle: operator
-      role: metrics
-      metrics: hosa 
-  data:
-    hawkular-openshift-agent: |
-      endpoints:
-      - type: jolokia
-        protocol: https
-        port: 8778
-        path: /jolokia/
-        collection_interval: 30s
-        tls:
-          skip_certificate_validation: true
-        credentials:
-          username: jolokia
-          password: ${JOLOKIA_PASSWORD}
-        metrics:
-        - name: java.lang:type=Memory#HeapMemoryUsage#used
-          type: gauge
-          id: jvm.heap.used
-          units: B
-          tags:
-            jvm_metrics: true
-            jvm_heap: true
-    
+            

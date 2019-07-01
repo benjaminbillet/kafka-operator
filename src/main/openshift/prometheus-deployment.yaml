@@ -30,13 +30,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: kafkaOperator
+  namespace: kafkaoperator
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: prometheus-deployment
-  namespace: kafkaOperator
+  namespace: kafkaoperator
 spec:
   replicas: 1
   template:
