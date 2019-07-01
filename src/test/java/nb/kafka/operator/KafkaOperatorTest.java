@@ -174,7 +174,7 @@ public class KafkaOperatorTest {
  }
 
   @Test
-  public void testUpdateTopicFailReplicationFactorChange() throws Exception {
+  public void testUpdateTopicFailReplicationFactorChange() throws Throwable {
  // Arrange
     Topic updatedTopic = new Topic("test-topic", 1, (short)3, Collections.singletonMap("retention.ms", "3600000"),
         false);
@@ -198,7 +198,7 @@ public class KafkaOperatorTest {
   }
 
   @Test
-  public void testUpdateTopicFailPartitionsReduction() throws Exception {
+  public void testUpdateTopicFailPartitionsReduction() throws Throwable {
     // Arrange
     Topic updatedTopic = new Topic("test-topic", 1, (short)1, Collections.singletonMap("retention.ms", "3600000"),
         false);
